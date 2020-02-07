@@ -1,5 +1,5 @@
 //
-//  GameSceneProtocol.swift
+//  GameViewProtocol.swift
 //  BlocksGame
 //
 //  Created by Svetlana Gladysheva on 19/01/2020.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-protocol GameSceneProtocol {
+protocol GameViewProtocol {
     func addFigure(figure: Figure, position: Int)
     func setFigureDisabled(disabled: Bool, position: Int)
     func addFilledCells(cellPositions: [CellPosition])

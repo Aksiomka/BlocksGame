@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController, GameSceneDelegate {
+class GameViewController: UIViewController, GameSceneDelegate, GameOverSceneDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ class GameViewController: UIViewController, GameSceneDelegate {
         return true
     }
     
-    func showGameOverScene() {
+    func gameOver() {
         let skView = view as! SKView
         let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
         let gameOverScene = GameOverScene(size: view.bounds.size)

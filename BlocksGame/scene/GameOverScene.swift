@@ -10,9 +10,13 @@ import Foundation
 import SpriteKit
 
 
+protocol GameOverSceneDelegate {
+    func gameEnd()
+}
+
 class GameOverScene: SKScene {
     
-    var gameDelegate: GameSceneDelegate? = nil
+    var gameDelegate: GameOverSceneDelegate? = nil
     
     override init(size: CGSize) {
         super.init(size: size)

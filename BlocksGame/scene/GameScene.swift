@@ -9,9 +9,14 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene, GameSceneProtocol {
+
+protocol GameSceneDelegate {
+    func gameOver()
+}
+
+class GameScene: SKScene, GameViewProtocol {
     
-    private let game = Game()
+    private let presenter = GamePresenter()
     private var grid: Grid!
     private let scoreLabel = SKLabelNode()
     private let maxScoreLabel = SKLabelNode()
@@ -25,7 +30,7 @@ class GameScene: SKScene, GameSceneProtocol {
     var gameDelegate: GameSceneDelegate? = nil
     
     override func didMove(to view: SKView) {
-        game.gameScene = self
+        presenter.gameView = self
         
         cellSize = (Int(frame.width) - 2 * Constants.PADDING) / Constants.NUMBER_OF_CELLS
         smallCellSize = Int(Double(cellSize) * 0.6)
@@ -52,7 +57,7 @@ class GameScene: SKScene, GameSceneProtocol {
             figureNodes.append(nil)
         }
         
-        game.onLoad()
+        presenter.onLoad()
     }
     
     private func addGrid() {
@@ -147,24 +152,19 @@ class GameScene: SKScene, GameSceneProtocol {
             for node in touchedNodes {
                 if let figureNode = node as? FigureNode, !figureNode.isDisabled, let position = figureNodes.firstIndex(of: figureNode) {
                     self.draggedNode = figureNode
-                    game.onFigureDragBegan(position: position)
+                    presenter.onFigureDragBegan(position: position)
                 }
             }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first, let node = draggedNode {
+        if let touch = touches.first, let figureNode = draggedNode {
             let touchLocation = touch.location(in: self)
-            node.position = touchLocation
+            figureNode.position = touchLocation
             
-            var figureCellPositions: [CellPosition?] = []
-            for figureNode in node.children {
-                let position = getCellPosition(figureNode: figureNode, grid: grid)
-                figureCellPositions.append(position)
-            }
-            
-            game.onFigureMoved(cellPositions: figureCellPositions)
+            let cellPosition = getCellPosition(figureNode: figureNode, grid: grid)
+            presenter.onFigureMoved(figure: figureNode.figure, cellPosition: cellPosition)
         }
     }
     
@@ -178,13 +178,8 @@ class GameScene: SKScene, GameSceneProtocol {
     
     private func onTouchFinished() {
         if let figureNode = draggedNode {
-            var figureCellPositions: [CellPosition] = []
-            for figureChildNode in figureNode.children {
-                if let position = getCellPosition(figureNode: figureChildNode, grid: grid) {
-                    figureCellPositions.append(position)
-                }
-            }
-            game.onFigureDropped(cellPositions: figureCellPositions, figureNumber: figureNode.figureNumber)
+            let cellPosition = getCellPosition(figureNode: figureNode, grid: grid)
+            presenter.onFigureDropped(figure: figureNode.figure, cellPosition: cellPosition, figureNumber: figureNode.figureNumber)
         }
         self.draggedNode = nil
     }
@@ -218,7 +213,7 @@ class GameScene: SKScene, GameSceneProtocol {
     }
     
     func gameEnd() {
-        gameDelegate?.showGameOverScene()
+        gameDelegate?.gameOver()
     }
     
     func updateMaxScore(maxScore: Int) {
