@@ -69,15 +69,14 @@ class GameField {
     }
     
     func isFigureFit(figure: Figure, cellPosition: CellPosition) -> Bool {
-        var isFit = true
         for point in figure.points {
             let x = cellPosition.x + point.x
             let y = cellPosition.y + point.y
             if x < 0 || x >= rows || y < 0 || y >= cols || filledCells[x][y] {
-                isFit = false
+                return false
             }
         }
-        return isFit
+        return true
     }
     
     func getFilledCellPositions() -> [CellPosition] {

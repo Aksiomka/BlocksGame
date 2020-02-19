@@ -105,23 +105,6 @@ class GamePresenter {
         }
     }
     
-    /*private func isFigureFit(figure: Figure) -> Bool {
-        for i in 0 ..< Constants.NUMBER_OF_CELLS {
-            for j in 0 ..< Constants.NUMBER_OF_CELLS {
-                var isFit = true
-                for point in figure.points {
-                    if point.x + i < 0 || point.x + i >= Constants.NUMBER_OF_CELLS || point.y + j < 0 || point.y + j >= Constants.NUMBER_OF_CELLS || cellStates[point.x + i][point.y + j] {
-                        isFit = false
-                    }
-                }
-                if isFit {
-                    return true
-                }
-            }
-        }
-        return false
-    }*/
-    
     private func gameOver() {
         let maxScore = storage.loadMaxScore()
         if score > maxScore {
@@ -176,19 +159,4 @@ class GamePresenter {
             figures.append(figure)
         }
     }
-    
-    /*private func filterCellPositions(positions: [CellPosition?]) -> [CellPosition] {
-        var filteredPositions = [CellPosition]()
-        for position in positions {
-            if let position = position, filteredPositions.contains(position) == false,
-                !cellStates[position.x][position.y] {
-                filteredPositions.append(position)
-            }
-        }
-        if filteredPositions.count == positions.count {
-            return filteredPositions
-        } else {
-            return []
-        }
-    }*/
 }

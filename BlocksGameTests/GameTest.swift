@@ -10,9 +10,9 @@ import XCTest
 @testable import BlocksGame
 
 
-class GameTest: XCTestCase {
+class GameFieldTest: XCTestCase {
     
-    /*private var game: Game!
+    private var gameField: GameField!
     
     private let figure1 = Figure(points: [CellPosition(x: 0, y: 0)])
     private let figure2 = Figure(points: [CellPosition(x: 0, y: 0), CellPosition(x: 1, y: 0)])
@@ -20,48 +20,55 @@ class GameTest: XCTestCase {
     private let figure4 = Figure(points: [CellPosition(x: 0, y: 0), CellPosition(x: 1, y: 0), CellPosition(x: 2, y: 0), CellPosition(x: -1, y: 0)])
     
     override func setUp() {
-        game = Game()
+        gameField = GameField(rows: 9, cols: 9)
     }
     
     func testIsFigureFit_EmptyField() {
-        XCTAssertTrue(game.isFigureFit(figure: figure1))
-        XCTAssertTrue(game.isFigureFit(figure: figure2))
-        XCTAssertTrue(game.isFigureFit(figure: figure3))
-        XCTAssertTrue(game.isFigureFit(figure: figure4))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure1))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure2))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure3))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure4))
     }
     
     func testIsFigureFit_FullField() {
-        let filledCells = makeFullFieldCells()
-        game.cellStates = filledCells
+        gameField.setFilledCellPositions(filledCellPositions: makeFullFieldCellPositions())
         
-        XCTAssertFalse(game.isFigureFit(figure: figure1))
-        XCTAssertFalse(game.isFigureFit(figure: figure2))
-        XCTAssertFalse(game.isFigureFit(figure: figure3))
-        XCTAssertFalse(game.isFigureFit(figure: figure4))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure1))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure2))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure3))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure4))
     }
     
-    func testIsFigureFit_1() {
-        var filledCells = makeFullFieldCells()
-        filledCells[0][6] = false
-        filledCells[0][7] = false
-        filledCells[0][8] = false
-        filledCells[1][7] = false
-        game.cellStates = filledCells
-        XCTAssertTrue(game.isFigureFit(figure: figure1))
-        XCTAssertTrue(game.isFigureFit(figure: figure2))
-        XCTAssertFalse(game.isFigureFit(figure: figure3))
-        XCTAssertFalse(game.isFigureFit(figure: figure4))
+    func testIsFigureFit_OneCellLeft() {
+        var cellPositions = makeFullFieldCellPositions()
+        cellPositions.removeLast()
+        gameField.setFilledCellPositions(filledCellPositions: cellPositions)
+        
+        XCTAssertTrue(gameField.isFigureFit(figure: figure1))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure2))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure3))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure4))
     }
     
-    private func makeFullFieldCells() -> [[Bool]] {
-        var filledCells: [[Bool]] = []
+    func testIsFigureFit_OneColumnLeft() {
+        var cellPositions = makeFullFieldCellPositions()
+        cellPositions.removeAll(where: { $0.y == 3 })
+        gameField.setFilledCellPositions(filledCellPositions: cellPositions)
+        
+        XCTAssertTrue(gameField.isFigureFit(figure: figure1))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure2))
+        XCTAssertFalse(gameField.isFigureFit(figure: figure3))
+        XCTAssertTrue(gameField.isFigureFit(figure: figure4))
+    }
+    
+    private func makeFullFieldCellPositions() -> [CellPosition] {
+        var cellPositions: [CellPosition] = []
         for i in 0 ..< Constants.NUMBER_OF_CELLS {
-            filledCells.append([])
-            for _ in 0 ..< Constants.NUMBER_OF_CELLS {
-                filledCells[i].append(true)
+            for j in 0 ..< Constants.NUMBER_OF_CELLS {
+                cellPositions.append(CellPosition(x: i, y: j))
             }
         }
-        return filledCells
-    }*/
+        return cellPositions
+    }
     
 }

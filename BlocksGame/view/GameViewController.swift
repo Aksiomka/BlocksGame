@@ -36,16 +36,11 @@ class GameViewController: UIViewController, GameSceneDelegate, GameOverSceneDele
         }
     }
 
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
     func gameOver() {
         let skView = view as! SKView
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
         let gameOverScene = GameOverScene(size: view.bounds.size)
         gameOverScene.gameDelegate = self
-        skView.presentScene(gameOverScene/*, transition: reveal*/)
+        skView.presentScene(gameOverScene)
     }
     
     func gameEnd() {
